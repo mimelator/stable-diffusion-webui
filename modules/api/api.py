@@ -133,6 +133,9 @@ def encode_pil_to_base64(image):
 
 
 def api_middleware(app: FastAPI):
+    # Reset middleware stack to allow adding middleware after app has started
+    app.middleware_stack = None
+    
     rich_available = False
     try:
         if os.environ.get('WEBUI_RICH_EXCEPTIONS', None) is not None:
@@ -194,6 +197,10 @@ def api_middleware(app: FastAPI):
     @app.exception_handler(HTTPException)
     async def http_exception_handler(request: Request, e: HTTPException):
         return handle_exception(request, e)
+    
+    # Rebuild middleware stack to allow adding middleware after app has started
+    app.middleware_stack = None
+    app.build_middleware_stack()
 
 
 class Api:
