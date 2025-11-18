@@ -1,0 +1,169 @@
+Realistic Vision (v5.1 or v6.0) — photorealistic, NSFW-friendly
+CyberRealistic — photorealistic, detailed
+AbyssOrangeMix2 Hardcore — explicit content
+Deliberate — versatile, NSFW-friendly
+DreamShaper — artistic, NSFW-friendly
+
+# Realistic Vision V6.0 B1 noVAE - Multiple safetensors versions available:
+# Full precision (4.27 GB):
+wget https://huggingface.co/SG161222/Realistic_Vision_V6.0_B1_noVAE/resolve/main/Realistic_Vision_V6.0_NV_B1.safetensors -O Realistic_Vision_V6.0_NV_B1.safetensors
+
+# Half precision/fp16 (2.13 GB - RECOMMENDED, uses less VRAM):
+# wget https://huggingface.co/SG161222/Realistic_Vision_V6.0_B1_noVAE/resolve/main/Realistic_Vision_V6.0_NV_B1_fp16.safetensors -O Realistic_Vision_V6.0_NV_B1_fp16.safetensors
+
+# Note: The model page recommends using with VAE for better quality:
+# VAE: https://huggingface.co/stabilityai/sd-vae-ft-mse-original/resolve/main/vae-ft-mse-840000-ema-pruned.ckpt
+
+# ============================================================================
+# CONFIGURATION INSTRUCTIONS
+# ============================================================================
+
+# Files are already downloaded:
+# - Model: models/Stable-diffusion/Realistic_Vision_V6.0_NV_B1_fp16.safetensors
+# - VAE: models/VAE/vae-ft-mse-840000-ema-pruned.ckpt
+
+# Method 1: Via WebUI Interface
+# 1. Launch WebUI: python launch.py --api --listen --port 7860
+# 2. In the WebUI, click the model dropdown at the top (next to "Generate")
+# 3. Select "Realistic_Vision_V6.0_NV_B1_fp16.safetensors"
+# 4. Go to Settings tab → Stable Diffusion → SD VAE
+# 5. Select "vae-ft-mse-840000-ema-pruned.ckpt" from dropdown
+# 6. Click "Apply settings" and "Reload UI"
+
+# Method 2: Via API (for programmatic use)
+# Set model:
+# curl -X POST http://localhost:7860/sdapi/v1/options \
+#   -H "Content-Type: application/json" \
+#   -d '{"sd_model_checkpoint": "Realistic_Vision_V6.0_NV_B1_fp16.safetensors"}'
+#
+# Set VAE:
+# curl -X POST http://localhost:7860/sdapi/v1/options \
+#   -H "Content-Type: application/json" \
+#   -d '{"sd_vae": "vae-ft-mse-840000-ema-pruned.ckpt"}'
+
+# Method 3: Via config file (persistent)
+# Edit: config.json (in webui root directory)
+# Set:
+#   "sd_model_checkpoint": "Realistic_Vision_V6.0_NV_B1_fp16.safetensors"
+#   "sd_vae": "vae-ft-mse-840000-ema-pruned.ckpt"
+
+# ============================================================================
+# CONFIGURED SETUP DOCUMENTATION
+# ============================================================================
+
+# MODEL CONFIGURED:
+#   Name: Realistic Vision V6.0 B1 noVAE (fp16)
+#   File: Realistic_Vision_V6.0_NV_B1_fp16.safetensors
+#   Size: 2.13 GB (half precision)
+#   Location: models/Stable-diffusion/
+#   Description: Photorealistic model, NSFW-friendly, optimized for realism
+#   Source: https://huggingface.co/SG161222/Realistic_Vision_V6.0_B1_noVAE
+
+# VAE CONFIGURED:
+#   Name: VAE ft MSE Original
+#   File: vae-ft-mse-840000-ema-pruned.ckpt
+#   Size: 319 MB
+#   Location: models/VAE/
+#   Description: Recommended VAE for Realistic Vision V6.0 - improves quality and reduces artifacts
+#   Source: https://huggingface.co/stabilityai/sd-vae-ft-mse-original
+
+# RECOMMENDED SETTINGS (from model page):
+#   Sampler: DPM++ SDE Karras (25+ steps) OR DPM++ 2M SDE (50+ steps)
+#   CFG Scale: 7.0 (default, can adjust)
+#   
+#   Resolutions:
+#     - Face Portrait: 896x896
+#     - Portrait: 896x896, 768x1024
+#     - Half Body: 768x1024, 640x1152
+#     - Full Body: 896x896, 768x1024, 640x1152, 1024x768, 1152x640
+#   
+#   Hires.Fix (Recommended for best quality):
+#     - Enable: Yes (especially for full body and half body)
+#     - Sampler: DPM++ SDE Karras or DPM++ 2M SDE
+#     - Denoising Steps: 10+ (DPM++ SDE Karras) / 20+ (DPM++ 2M SDE)
+#     - Denoising Strength: 0.1-0.3
+#     - Upscaler: 4x-UltraSharp / 4x_NMKD-Superscale-SP_178000_G or another
+#     - Upscale by: 1.1-2.0+
+#   
+#   Negative Prompt (Recommended):
+#     (deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, 
+#      cartoon, drawing, anime), text, cropped, out of frame, worst quality, 
+#      low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, 
+#      extra fingers, mutated hands, poorly drawn hands, poorly drawn face, 
+#      mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, 
+#      extra limbs, cloned face, disfigured, gross proportions, malformed limbs, 
+#      missing arms, missing legs, extra arms, extra legs, fused fingers, 
+#      too many fingers, long neck
+#
+#   Additional Tips:
+#     - Use Restore Faces or ADetailer for face improvements
+#     - Lower resolution if you get mutations/duplications
+#     - Model supports both SFW and NSFW content
+
+# WEBUI SETTINGS CONFIGURED:
+#   Settings → Stable Diffusion:
+#     - SD Model Checkpoint: Realistic_Vision_V6.0_NV_B1_fp16.safetensors
+#     - SD VAE: vae-ft-mse-840000-ema-pruned.ckpt
+#     - (Other settings use defaults unless specified)
+
+# API USAGE EXAMPLE:
+#   curl -X POST http://localhost:7860/sdapi/v1/txt2img \
+#     -H "Content-Type: application/json" \
+#     -d '{
+#       "prompt": "a beautiful portrait of a woman, photorealistic",
+#       "negative_prompt": "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime), text, cropped, out of frame, worst quality, low quality",
+#       "steps": 25,
+#       "sampler_name": "DPM++ SDE Karras",
+#       "cfg_scale": 7.0,
+#       "width": 768,
+#       "height": 1024,
+#       "enable_hr": true,
+#       "hr_scale": 1.5,
+#       "hr_upscaler": "4x-UltraSharp",
+#       "hr_second_pass_steps": 10,
+#       "denoising_strength": 0.2
+#     }'
+
+# VERIFICATION:
+#   Check current model: curl http://localhost:7860/sdapi/v1/options | grep sd_model_checkpoint
+#   Check current VAE: curl http://localhost:7860/sdapi/v1/options | grep sd_vae
+
+# Deliberate v3 - Download from CivitAI (requires getting direct link from website)
+# Option 1: Visit https://civitai.com/models/15236 and download manually, or
+# Option 2: Use CivitAI API (may require authentication):
+# wget "https://civitai.com/api/download/models/15236?type=Model&format=SafeTensor&size=full&fp=fp16" -O deliberate-v3.safetensors
+
+# ============================================================================
+# LOCAL APPS FOR DIFFUSERS FORMAT (with API mode)
+# ============================================================================
+
+# Option 1: InvokeAI (Native Diffusers support + API)
+# Installation:
+#   pip install invokeai
+#   invokeai-configure
+# Launch with API:
+#   invokeai --web --host 0.0.0.0 --port 9090
+# API endpoint: http://localhost:9090/api/v1/generate
+# Supports: Diffusers format models directly from Hugging Face
+
+# Option 2: ComfyUI (Supports both safetensors AND diffusers + API)
+# Installation:
+#   git clone https://github.com/comfyanonymous/ComfyUI.git
+#   cd ComfyUI
+#   pip install -r requirements.txt
+# Launch with API:
+#   python main.py --listen 0.0.0.0 --port 8188
+# API endpoint: http://localhost:8188/api/v1/generate
+# Supports: Both formats, node-based workflow
+
+# Option 3: Simple Python FastAPI Server (for Diffusers format)
+# Create a file: diffusers_api.py
+#   pip install diffusers transformers accelerate torch fastapi uvicorn pillow
+#   python diffusers_api.py
+# See example script below
+
+# Option 4: LocalAI (OpenAI-compatible API, supports Diffusers)
+# Installation:
+#   docker run -p 8080:8080 --gpus all localai/localai:latest-aio-cuda
+# API endpoint: http://localhost:8080/v1/images/generations
+# Supports: Diffusers format, OpenAI-compatible API
