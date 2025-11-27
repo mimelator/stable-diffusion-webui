@@ -33,7 +33,7 @@ class GenerateRequest(BaseModel):
     width: Optional[int] = 512
     height: Optional[int] = 512
     seed: Optional[int] = None
-    model_id: Optional[str] = "stablediffusionapi/deliberate-3"  # Default model
+    model_id: Optional[str] = "stablediffusionapi/abyssorangemix2-hardcore"  # Default model
 
 @app.on_event("startup")
 async def load_model():
@@ -41,7 +41,7 @@ async def load_model():
     global pipe
     print("Loading model... This may take a few minutes.")
     # You can change the default model here
-    model_id = "stablediffusionapi/deliberate-3"
+    model_id = "stablediffusionapi/abyssorangemix2-hardcore"
     
     # Check if CUDA is available
     device = "cuda" if torch.cuda.is_available() else "cpu"

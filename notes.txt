@@ -1,8 +1,390 @@
+Real-Dreams — photorealistic, artistic, versatile (CURRENTLY ACTIVE)
 Realistic Vision (v5.1 or v6.0) — photorealistic, NSFW-friendly
 CyberRealistic — photorealistic, detailed
-AbyssOrangeMix2 Hardcore — explicit content
+AbyssOrangeMix2 Hardcore — explicit content, anime-style, NSFW
 Deliberate — versatile, NSFW-friendly
 DreamShaper — artistic, NSFW-friendly
+
+# ============================================================================
+# MODERN MODEL COMPATIBILITY NOTE
+# ============================================================================
+# 
+# SUPPORTED FORMATS:
+#   ✅ SD 1.x (current models) - Best compatibility, NSFW-friendly
+#   ✅ SD 2.x - Supported but has NSFW filters
+#   ✅ SDXL - Supported, high quality, NSFW-friendly (requires 8GB+ VRAM)
+#   ✅ SD 3 - Supported but has safety filters, limited NSFW
+#
+# NOT SUPPORTED:
+#   ❌ Flux models - Different architecture, use ComfyUI/InvokeAI instead
+#   ❌ Some proprietary formats
+#
+# See MODERN_MODELS_COMPATIBILITY.md for full details
+#
+
+# ============================================================================
+# REAL-DREAMS CONFIGURATION (CURRENTLY ACTIVE MODEL)
+# ============================================================================
+#
+# Real-Dreams is a versatile photorealistic model
+# Currently active in config.json: Real-Dreams.safetensors [ab51aab984]
+# File location: models/Stable-diffusion/Real-Dreams.safetensors (2.0 GB)
+# VAE: vae-ft-mse-840000-ema-pruned.ckpt (currently active)
+#
+# RECOMMENDED SETTINGS FOR REAL-DREAMS:
+# ======================================
+#
+#   Sampler:
+#     - Euler a (20-30 steps) - Fast, good quality - RECOMMENDED
+#     - DPM++ 2M Karras (20-30 steps) - Excellent quality
+#     - DPM++ SDE Karras (25-40 steps) - Highest quality, slower
+#     - DDIM (20-30 steps) - Classic, reliable
+#
+#   CFG Scale:
+#     - Default: 7.5-8.0 (sweet spot)
+#     - Range: 6.0-9.0
+#     - Lower (6-7): More creative, softer results
+#     - Higher (8-9): Stronger prompt adherence
+#
+#   Steps:
+#     - Quick tests: 20 steps
+#     - Recommended: 25-30 steps
+#     - High quality: 30-40 steps
+#     - Diminishing returns after 40 steps
+#
+#   Resolution:
+#     - Base: 512x512, 768x768
+#     - Portrait: 512x768, 768x1024
+#     - Landscape: 768x512, 1024x768
+#     - Square: 512x512, 768x768, 1024x1024
+#
+#   Hires.Fix:
+#     - Enable: Yes (recommended for final outputs)
+#     - Upscale by: 1.5-2.0x
+#     - Denoising strength: 0.3-0.5
+#     - Upscaler: 4x-UltraSharp (best) or R-ESRGAN 4x+
+#     - Steps: 10-20 for Hires.Fix pass
+#
+# PROMPT ENGINEERING FOR REAL-DREAMS:
+# ===================================
+#
+#   Quality Tags (start of prompt):
+#     "masterpiece, best quality, highly detailed, 8k, uhd, detailed"
+#
+#   Style Tags:
+#     - "photorealistic" - For realistic images
+#     - "artistic" - For artistic style
+#     - "sharp focus" - For clarity
+#     - "professional photography" - For photo-like results
+#
+#   Example Prompt Structure:
+#     "masterpiece, best quality, highly detailed, 8k, uhd, 
+#      [your detailed description], 
+#      photorealistic, sharp focus, professional photography"
+#
+#   Negative Prompt (Recommended):
+#     "lowres, bad anatomy, bad hands, text, error, missing fingers, 
+#      extra digit, fewer digits, cropped, worst quality, low quality, 
+#      normal quality, jpeg artifacts, signature, watermark, username, 
+#      blurry, bad feet, bad proportions, gross proportions, 
+#      deformed, ugly, mutilated, disfigured, extra limbs, 
+#      cloned face, bad eyes, bad face, mutation"
+#
+# REAL-DREAMS WORKFLOW:
+# =====================
+#
+#   Quick Test:
+#     1. Resolution: 512x768
+#     2. Steps: 25, CFG: 7.5, Sampler: Euler a
+#     3. Generate test
+#     4. If good, enable Hires.Fix (1.5x, denoising 0.4)
+#     5. Enable ADetailer if face needs work
+#
+#   Production:
+#     1. Base: 768x1024, 30 steps, CFG 7.5-8.0, DPM++ 2M Karras
+#     2. Hires.Fix: 2.0x, 4x-UltraSharp, denoising 0.4, 20 steps
+#     3. ADetailer: Face enhancement
+#     4. Batch generate 4-8 variations
+#     5. Pick best and refine
+#
+# API CONFIGURATION:
+# ==================
+#
+#   Current model is set via config.json:
+#     "sd_model_checkpoint": "Real-Dreams.safetensors [ab51aab984]"
+#     "sd_vae": "vae-ft-mse-840000-ema-pruned.ckpt"
+#
+#   Verify current model:
+#     curl http://localhost:7860/sdapi/v1/options | grep sd_model_checkpoint
+#
+#   Example API call:
+#     curl -X POST http://localhost:7860/sdapi/v1/txt2img \
+#       -H "Content-Type: application/json" \
+#       -d '{
+#         "prompt": "masterpiece, best quality, highly detailed, 8k, a beautiful portrait, photorealistic",
+#         "negative_prompt": "lowres, bad anatomy, bad hands, text, error, worst quality, low quality",
+#         "steps": 25,
+#         "sampler_name": "Euler a",
+#         "cfg_scale": 7.5,
+#         "width": 512,
+#         "height": 768,
+#         "enable_hr": true,
+#         "hr_scale": 1.5,
+#         "hr_upscaler": "4x-UltraSharp",
+#         "hr_second_pass_steps": 15,
+#         "denoising_strength": 0.4
+#       }'
+#
+# TIPS FOR REAL-DREAMS:
+# ====================
+#   - Versatile model, works well for portraits and artistic images
+#   - Use with ADetailer for face enhancement
+#   - Hires.Fix significantly improves quality
+#   - CFG 7.5-8.0 is optimal range
+#   - Works well with current VAE (vae-ft-mse-840000-ema-pruned.ckpt)
+#   - Good balance between realism and artistic style
+#
+# TROUBLESHOOTING:
+# ================
+#   - Low quality: Increase steps to 30-40, enable Hires.Fix
+#   - Too realistic: Adjust prompt, try artistic terms
+#   - Artifacts: Lower CFG, check VAE, reduce denoising strength
+#   - Out of memory: Reduce resolution, enable attention slicing
+#   - Wrong colors: Check VAE is loaded correctly
+#
+# MODEL FILE INFO:
+# ================
+#   File: Real-Dreams.safetensors
+#   Size: 2.0 GB
+#   Location: models/Stable-diffusion/
+#   Hash: ab51aab984d549b002c27e0757fa899149bbcaa6e27f83888c92ea1dbfd8ea2a
+#   Status: Currently active in config.json
+
+# ============================================================================
+# ABYSSORANGEMIX2 HARDCORE CONFIGURATION
+# ============================================================================
+#
+# AbyssOrangeMix2 (AOM2) is an anime-style model based on Stable Diffusion
+# Known for high-quality anime/waifu generation with explicit content support
+# Multiple variants available: Hardcore, SFW, etc.
+#
+# DOWNLOAD OPTIONS:
+# ================
+# 
+# Option 1: CivitAI (RECOMMENDED - Single safetensors checkpoint)
+#   Visit: https://civitai.com/models/ (search "AbyssOrangeMix2")
+#   Download safetensors version (fp16 recommended for VRAM efficiency)
+#   Common filenames:
+#     - AbyssOrangeMix2_hard.safetensors
+#     - AbyssOrangeMix2_SFW.safetensors
+#     - AOM2_hard.safetensors
+#   Place downloaded file in: models/Stable-diffusion/
+#
+# Option 2: Hugging Face (Diffusers format - multiple files)
+#   Repository: https://huggingface.co/stablediffusionapi/abyssorangemix2-hardcore
+#   NOTE: This is Diffusers format (not single checkpoint)
+#   Components: unet, vae, text_encoder, safety_checker (separate files)
+#   Use with: diffusers_api_server.py or convert to single checkpoint
+#
+#   To use with diffusers_api_server.py:
+#     - Update model_id in diffusers_api_server.py to:
+#       "stablediffusionapi/abyssorangemix2-hardcore"
+#     - Model will auto-download on first use
+#
+#   To convert Diffusers to single safetensors (advanced):
+#     Use conversion script or download from CivitAI instead (easier)
+#
+# Option 3: Direct download from CivitAI (if you have the link)
+#   wget [CIVITAI_MODEL_URL] -O AbyssOrangeMix2_hard.safetensors
+#   Place in: models/Stable-diffusion/
+#
+# MODEL VARIANTS:
+# ==============
+#   - Hardcore: Explicit content, full NSFW support
+#   - SFW: Safe for work version
+#   - Base: Standard version
+#   Choose based on your needs
+#
+# RECOMMENDED VAE FOR ABYSSORANGEMIX2:
+# ====================================
+#   - orangemix.vae.pt (specifically made for OrangeMix models) - BEST CHOICE
+#   - kl-f8-anime2.ckpt (anime-optimized VAE)
+#   - vae-ft-mse-840000-ema-pruned.ckpt (general purpose, works but not optimal)
+#
+#   Download orangemix.vae.pt:
+#     - Search CivitAI or Hugging Face for "orangemix vae"
+#     - Place in: models/VAE/
+#
+# RECOMMENDED SETTINGS FOR ABYSSORANGEMIX2:
+# =========================================
+#
+#   Sampler: 
+#     - Euler a (20-30 steps) - Fast, good for anime style - RECOMMENDED
+#     - DPM++ 2M Karras (20-30 steps) - Good quality
+#     - DPM++ SDE Karras (25-40 steps) - Higher quality, slower
+#     - DDIM (20-30 steps) - Classic, reliable
+#
+#   CFG Scale:
+#     - Default: 7.0-9.0 (anime models often work better with slightly higher CFG)
+#     - Range: 6.0-12.0
+#     - Sweet spot: 7.5-9.0 for most anime content
+#     - Lower (5-7): More creative, softer results
+#     - Higher (10-12): Stronger prompt adherence, may look over-processed
+#
+#   Resolution:
+#     - Native: 512x512, 768x768
+#     - Portrait: 512x768, 768x1024
+#     - Landscape: 768x512, 1024x768
+#     - Square: 512x512, 768x768, 1024x1024
+#     - Note: Anime models often work well at 512x512 base, then upscale
+#
+#   Steps:
+#     - Minimum: 20 steps (Euler a)
+#     - Recommended: 25-35 steps
+#     - High quality: 40-50 steps (diminishing returns after 50)
+#
+#   Hires.Fix (Recommended for anime):
+#     - Enable: Yes (especially for detailed characters)
+#     - Upscale by: 1.5-2.0x
+#     - Denoising strength: 0.3-0.5 (anime can handle higher denoising)
+#     - Upscaler: 
+#       * 4x-UltraSharp (best detail)
+#       * R-ESRGAN 4x+ Anime6B (anime-specific upscaler) - RECOMMENDED
+#       * Latent (fastest)
+#     - Steps: 10-20 (for Hires.Fix pass)
+#
+# PROMPT ENGINEERING FOR ABYSSORANGEMIX2:
+# =======================================
+#
+#   Quality Tags (use at start of prompt):
+#     "masterpiece, best quality, highly detailed, 8k, uhd, detailed"
+#
+#   Style Tags:
+#     - "anime style" or "anime"
+#     - "1girl" or "1boy" (for single character)
+#     - "solo" (single character, no background focus)
+#     - "detailed face" or "beautiful detailed face"
+#     - "detailed eyes"
+#
+#   Character Tags:
+#     - "waifu" (for female characters)
+#     - "kawaii" (cute style)
+#     - "mature" (for older characters)
+#     - Specific anime style references if desired
+#
+#   Example Prompt Structure:
+#     "masterpiece, best quality, highly detailed, 8k, 1girl, solo, 
+#      beautiful detailed face, detailed eyes, [character description], 
+#      [clothing/outfit], [pose], [background], anime style"
+#
+#   Negative Prompt (Recommended):
+#     "lowres, bad anatomy, bad hands, text, error, missing fingers, 
+#      extra digit, fewer digits, cropped, worst quality, low quality, 
+#      normal quality, jpeg artifacts, signature, watermark, username, 
+#      blurry, bad feet, bad proportions, gross proportions, text, 
+#      error, missing fingers, missing arms, missing legs, extra digit"
+#
+#   Anime-Specific Negatives:
+#     "3d, realistic, photorealistic, cgi, render, sketch, drawing"
+#     (unless you want a hybrid style)
+#
+# ABYSSORANGEMIX2 WORKFLOW:
+# =========================
+#
+#   Quick Test Workflow:
+#     1. Set resolution: 512x768 or 768x768
+#     2. Steps: 25, CFG: 8.0, Sampler: Euler a
+#     3. Generate test image
+#     4. If composition good, enable Hires.Fix (1.5x, denoising 0.4)
+#     5. Use ADetailer for face enhancement if needed
+#
+#   Production Workflow:
+#     1. Generate base at 512x768, 30 steps, CFG 8.0, Euler a
+#     2. Enable Hires.Fix: 2.0x, R-ESRGAN 4x+ Anime6B, denoising 0.4, 15 steps
+#     3. ADetailer: Face enhancement (face_yolov8n.pt, denoising 0.4)
+#     4. Final upscale if needed (external upscaler)
+#
+# API CONFIGURATION FOR ABYSSORANGEMIX2:
+# ======================================
+#
+#   Set model via API:
+#     curl -X POST http://localhost:7860/sdapi/v1/options \
+#       -H "Content-Type: application/json" \
+#       -d '{"sd_model_checkpoint": "AbyssOrangeMix2_hard.safetensors"}'
+#
+#   Set VAE:
+#     curl -X POST http://localhost:7860/sdapi/v1/options \
+#       -H "Content-Type: application/json" \
+#       -d '{"sd_vae": "orangemix.vae.pt"}'
+#
+#   Example API call:
+#     curl -X POST http://localhost:7860/sdapi/v1/txt2img \
+#       -H "Content-Type: application/json" \
+#       -d '{
+#         "prompt": "masterpiece, best quality, highly detailed, 8k, 1girl, solo, beautiful detailed face, detailed eyes, anime style",
+#         "negative_prompt": "lowres, bad anatomy, bad hands, text, error, missing fingers, worst quality, low quality",
+#         "steps": 30,
+#         "sampler_name": "Euler a",
+#         "cfg_scale": 8.0,
+#         "width": 512,
+#         "height": 768,
+#         "enable_hr": true,
+#         "hr_scale": 1.5,
+#         "hr_upscaler": "R-ESRGAN 4x+ Anime6B",
+#         "hr_second_pass_steps": 15,
+#         "denoising_strength": 0.4
+#       }'
+#
+# TIPS FOR ABYSSORANGEMIX2:
+# =========================
+#   - This model excels at anime/waifu generation
+#   - Works great with LoRA models for specific characters/styles
+#   - Use anime-specific upscalers for best results
+#   - Higher CFG (8-9) often works better than photorealistic models
+#   - Can handle explicit content (Hardcore variant)
+#   - Good for character portraits and full-body images
+#   - Combine with ControlNet for pose control
+#   - Use ADetailer for face refinement
+#   - Try different samplers - Euler a is classic for anime
+#
+# TROUBLESHOOTING:
+# ===============
+#   - Too realistic: Add "anime style" to prompt, use anime VAE
+#   - Colors look off: Use orangemix.vae.pt VAE
+#   - Low quality: Increase steps, enable Hires.Fix, use quality tags
+#   - Wrong style: Adjust prompt with anime-specific tags
+#   - Artifacts: Lower CFG, check VAE, reduce denoising strength
+#   - Out of memory: Use 512x512 base, enable attention slicing
+#
+# MODEL LOCATION:
+# ==============
+#   Place model file in: models/Stable-diffusion/
+#   Place VAE file in: models/VAE/
+#
+# VERIFICATION:
+# ============
+#   Check current model: curl http://localhost:7860/sdapi/v1/options | grep sd_model_checkpoint
+#   Check current VAE: curl http://localhost:7860/sdapi/v1/options | grep sd_vae
+#
+# DOWNLOADING FROM CIVITAI:
+# =========================
+#   1. Visit CivitAI and search for "AbyssOrangeMix2"
+#   2. Select the Hardcore variant
+#   3. Download the safetensors file (fp16 version recommended)
+#   4. Save to: models/Stable-diffusion/AbyssOrangeMix2_hard.safetensors
+#
+# USING DIFFUSERS FORMAT (from Hugging Face):
+# ============================================
+#   The Hugging Face repo has Diffusers format. To use it:
+#   
+#   Option A: Use with diffusers_api_server.py
+#     Edit diffusers_api_server.py, change model_id to:
+#     model_id = "stablediffusionapi/abyssorangemix2-hardcore"
+#     Run: python diffusers_api_server.py
+#     Model will auto-download on first run
+#
+#   Option B: Convert to single checkpoint (requires conversion script)
+#     More complex - recommend using CivitAI download instead
 
 # Realistic Vision V6.0 B1 noVAE - Multiple safetensors versions available:
 # Full precision (4.27 GB):
@@ -17,6 +399,319 @@ wget https://huggingface.co/SG161222/Realistic_Vision_V6.0_B1_noVAE/resolve/main
 # ============================================================================
 # CONFIGURATION INSTRUCTIONS
 # ============================================================================
+
+# ============================================================================
+# QUALITY IMPROVEMENT SUGGESTIONS
+# ============================================================================
+
+# 1. SAMPLER & STEPS OPTIMIZATION
+#    - Best samplers for quality (in order):
+#      * DPM++ 2M SDE Karras (50-80 steps) - Best quality, slower
+#      * DPM++ SDE Karras (25-40 steps) - Great balance
+#      * Euler a (20-30 steps) - Fast, good for testing
+#      * DPM++ 2M (20-30 steps) - Fast alternative
+#    - More steps = better quality but diminishing returns after 50-80
+#    - For Hires.Fix: Use same sampler or DPM++ 2M SDE (20-30 steps)
+
+# 2. CFG SCALE TUNING
+#    - Default: 7.0 (good starting point)
+#    - Lower (4-6): More creative, less prompt adherence
+#    - Higher (8-12): Stronger prompt adherence, may look over-processed
+#    - Sweet spot: 6.5-8.0 for most photorealistic work
+#    - Very high (15+): Can introduce artifacts
+
+# 3. RESOLUTION & ASPECT RATIO
+#    - Use native model resolutions (512x512, 768x768, 1024x1024)
+#    - Avoid odd aspect ratios unless model specifically supports them
+#    - For portraits: 768x1024 or 896x896 (Realistic Vision V6.0)
+#    - For landscapes: 1024x768 or 1152x640
+#    - Higher resolution ≠ always better (can cause artifacts)
+#    - Use Hires.Fix instead of generating at high resolution directly
+
+# 4. HIRES.FIX / UPSCALING STRATEGY
+#    - ALWAYS enable for final outputs (especially portraits/bodies)
+#    - Denoising strength: 0.1-0.3 (lower = less change, higher = more detail)
+#    - Upscale by: 1.5-2.0x (start with 1.5, increase if needed)
+#    - Best upscalers:
+#      * 4x-UltraSharp (best detail preservation)
+#      * 4x_NMKD-Superscale-SP_178000_G (excellent for faces)
+#      * R-ESRGAN 4x+ (good general purpose)
+#      * Latent (fastest, less quality)
+#    - Two-pass approach: Generate at 768x1024, upscale to 1536x2048
+
+# 5. PROMPT ENGINEERING
+#    - Use quality tags: "masterpiece, best quality, highly detailed, 8k, uhd"
+#    - Be specific: "portrait of a woman with brown hair, natural lighting"
+#    - Use weights: (keyword:1.2) for emphasis, [keyword] for de-emphasis
+#    - Add technical terms: "photorealistic, sharp focus, professional photography"
+#    - For Realistic Vision: Focus on realism terms, avoid anime/artistic terms
+
+# 6. NEGATIVE PROMPT OPTIMIZATION
+#    - Always include base negative prompt (see recommended settings)
+#    - Add specific negatives based on issues:
+#      * Blurry: "blurry, out of focus, soft focus"
+#      * Artifacts: "jpeg artifacts, compression artifacts, pixelated"
+#      * Anatomy issues: "bad anatomy, malformed, deformed"
+#      * Quality: "low quality, worst quality, normal quality"
+#    - Don't overdo it - too many negatives can reduce quality
+
+# 7. FACE & DETAIL ENHANCEMENT
+#    - Enable "Restore Faces" for portraits (uses CodeFormer/GFPGAN)
+#    - Use ADetailer extension (automatic face/hand detail enhancement)
+#    - ADetailer settings:
+#      * Model: face_yolov8n.pt or face_yolov8s.pt
+#      * Denoising: 0.3-0.4
+#      * Steps: 20-30
+#      * CFG: 7.0
+#    - Can run multiple passes: face first, then hands
+#
+#    ADETAILER INSTALLATION & CONFIGURATION:
+#    ========================================
+#    
+#    Step 1: Install ADetailer Extension
+#    -------------------------------------
+#    Method A: Via WebUI (Recommended)
+#      1. Launch WebUI: python launch.py
+#      2. Go to "Extensions" tab
+#      3. Click "Available" sub-tab
+#      4. Click "Load from:" button to refresh extension list
+#      5. Search for "adetailer" or "ADetailer"
+#      6. Find "adetailer" by Bingsu (or "adetailer" by various authors)
+#      7. Click "Install" button
+#      8. Wait for installation to complete
+#      9. Go to "Installed" tab and click "Apply and restart UI"
+#
+#    Method B: Via Git (Manual)
+#      cd extensions
+#      git clone https://github.com/Bing-su/adetailer.git
+#      Restart WebUI
+#
+#    Step 2: Download Detection Models (Auto-downloads on first use, or manual)
+#    ---------------------------------------------------------------------------
+#    Models are auto-downloaded to: extensions/adetailer/models/
+#    
+#    Face Detection Models (choose one):
+#      - face_yolov8n.pt (fastest, good quality) - RECOMMENDED
+#      - face_yolov8s.pt (slower, better quality)
+#      - face_yolov8m.pt (slower, best quality)
+#      - mediapipe_face_short (alternative, fast)
+#    
+#    Hand Detection Models:
+#      - hand_yolov8n.pt (for hand enhancement)
+#      - hand_yolov8s.pt (better quality)
+#
+#    Manual download (if auto-download fails):
+#      Models location: https://github.com/Bing-su/adetailer/tree/main/adetailer/models
+#      Place in: extensions/adetailer/models/
+#
+#    Step 3: Configure ADetailer in WebUI
+#    -------------------------------------
+#    1. After installation, scroll down in txt2img/img2img tabs
+#    2. Find "ADetailer" section (collapsible accordion)
+#    3. Enable ADetailer by checking the checkbox
+#
+#    Step 4: Configure Face Enhancement (First Pass)
+#    ------------------------------------------------
+#    In the ADetailer section, configure:
+#
+#    [ADetailer] (First Pass - Face)
+#    ├─ Enable: ✓ (checked)
+#    ├─ ADetailer model: face_yolov8n.pt (or face_yolov8s.pt)
+#    ├─ Detection confidence threshold: 0.3 (default, adjust if missing faces)
+#    ├─ Mask dilation: 4 (default, increase if face too small)
+#    ├─ Mask blur: 4 (default, smooths edges)
+#    ├─ Inpaint only masked: ✓ (checked - only process detected faces)
+#    ├─ Inpaint padding: 32 (default, area around face to process)
+#    ├─ Denoising strength: 0.4 (0.3-0.5 range, higher = more change)
+#    ├─ CFG scale: 7.0 (match your main generation CFG)
+#    ├─ Steps: 28 (20-30 range, more = better quality)
+#    ├─ Sampler: DPM++ SDE Karras (or match your main sampler)
+#    ├─ Prompt: (leave empty to use main prompt, or add face-specific terms)
+#    │   Example: "beautiful face, detailed eyes, perfect skin, photorealistic"
+#    ├─ Negative prompt: (leave empty or add face-specific negatives)
+#    │   Example: "blurry face, deformed face, bad eyes"
+#    ├─ Mask only top-k largest: 1 (process largest face if multiple detected)
+#    └─ ControlNet: (optional, leave disabled unless using ControlNet)
+#
+#    Step 5: Configure Hand Enhancement (Second Pass - Optional)
+#    -----------------------------------------------------------
+#    Enable second ADetailer pass for hands:
+#
+#    [ADetailer] (Second Pass - Hands)
+#    ├─ Enable: ✓ (checked)
+#    ├─ ADetailer model: hand_yolov8n.pt
+#    ├─ Detection confidence threshold: 0.3
+#    ├─ Mask dilation: 4
+#    ├─ Mask blur: 4
+#    ├─ Inpaint only masked: ✓
+#    ├─ Inpaint padding: 32
+#    ├─ Denoising strength: 0.4
+#    ├─ CFG scale: 7.0
+#    ├─ Steps: 28
+#    ├─ Sampler: DPM++ SDE Karras
+#    ├─ Prompt: "perfect hands, detailed fingers, natural pose"
+#    ├─ Negative prompt: "deformed hands, extra fingers, missing fingers"
+#    └─ Mask only top-k largest: 2 (process up to 2 largest hands)
+#
+#    Step 6: Recommended Settings for Realistic Vision V6.0
+#    -------------------------------------------------------
+#    Face Pass:
+#      Model: face_yolov8n.pt
+#      Denoising: 0.35-0.4
+#      Steps: 25-30
+#      CFG: 7.0
+#      Sampler: DPM++ SDE Karras
+#      Prompt: (empty - uses main prompt)
+#      Negative: "blurry, deformed face, bad eyes, bad anatomy"
+#
+#    Hand Pass (if hands visible):
+#      Model: hand_yolov8n.pt
+#      Denoising: 0.35-0.4
+#      Steps: 25-30
+#      CFG: 7.0
+#      Sampler: DPM++ SDE Karras
+#      Prompt: (empty)
+#      Negative: "deformed hands, extra fingers, missing fingers, bad anatomy"
+#
+#    Step 7: API Configuration (for programmatic use)
+#    -------------------------------------------------
+#    ADetailer can be controlled via API using the "alwayson_scripts" parameter:
+#
+#    Example API call with ADetailer:
+#    curl -X POST http://localhost:7860/sdapi/v1/txt2img \
+#      -H "Content-Type: application/json" \
+#      -d '{
+#        "prompt": "portrait of a woman, photorealistic",
+#        "negative_prompt": "blurry, low quality",
+#        "steps": 25,
+#        "cfg_scale": 7.0,
+#        "width": 768,
+#        "height": 1024,
+#        "alwayson_scripts": {
+#          "ADetailer": {
+#            "args": [
+#              true,  // Enable ADetailer
+#              "face_yolov8n.pt",  // Model
+#              0.3,  // Detection confidence
+#              4,  // Mask dilation
+#              4,  // Mask blur
+#              true,  // Inpaint only masked
+#              32,  // Inpaint padding
+#              0.4,  // Denoising strength
+#              7.0,  // CFG scale
+#              28,  // Steps
+#              "DPM++ SDE Karras",  // Sampler
+#              "",  // Prompt (empty = use main)
+#              "blurry face, deformed",  // Negative prompt
+#              1,  // Mask only top-k largest
+#              null  // ControlNet (null = disabled)
+#            ]
+#          }
+#        }
+#      }'
+#
+#    Step 8: Troubleshooting
+#    ------------------------
+#    - Faces not detected: Lower detection confidence (try 0.2)
+#    - Too many faces detected: Increase "Mask only top-k largest" or raise confidence
+#    - Face looks over-processed: Lower denoising strength (try 0.3)
+#    - Face looks unchanged: Increase denoising strength (try 0.5)
+#    - Wrong area processed: Adjust mask dilation and padding
+#    - Extension not showing: Restart WebUI, check Extensions → Installed tab
+#    - Models not downloading: Check internet connection, download manually
+#    - Out of memory: Reduce steps, use smaller model (face_yolov8n.pt)
+#
+#    Step 9: Advanced Tips
+#    ----------------------
+#    - Use separate prompts for face enhancement (e.g., "detailed eyes, perfect skin")
+#    - Combine with Hires.Fix: Generate → Hires.Fix → ADetailer
+#    - Use ADetailer AFTER Hires.Fix for best results
+#    - For multiple people: Set "Mask only top-k largest" to number of faces
+#    - Save presets: Configure once, save as preset in ADetailer settings
+#    - Batch processing: ADetailer works automatically on all generated images
+
+# 8. VAE SELECTION
+#    - Current: vae-ft-mse-840000-ema-pruned.ckpt (excellent choice)
+#    - Alternative high-quality VAEs:
+#      * vae-ft-mse-840000-ema-pruned.safetensors (same, different format)
+#      * orangemix.vae.pt (good for anime/artistic)
+#      * kl-f8-anime2.ckpt (anime-specific)
+#    - VAE can significantly improve color accuracy and reduce artifacts
+
+# 9. SEED & VARIATIONS
+#    - Use fixed seed for reproducibility
+#    - Generate multiple variations (seed -1 for random)
+#    - Use "Variation seed" for controlled variations
+#    - Batch generation: Generate 4-8 images, pick best, refine
+
+# 10. POST-PROCESSING PIPELINE
+#     - Step 1: Generate base image at optimal resolution
+#     - Step 2: Apply Hires.Fix with appropriate upscaler
+#     - Step 3: Use ADetailer for face/hand enhancement
+#     - Step 4: External upscaling (if needed): Real-ESRGAN, Topaz Gigapixel
+#     - Step 5: Color correction/sharpening in image editor
+
+# 11. ADVANCED TECHNIQUES
+#     - LoRA models: Add specific styles/characters/concepts
+#       * Load via Extensions → Additional Networks
+#       * Use weights: 0.5-1.0 (too high can overfit)
+#     - ControlNet: Control pose, depth, edges, etc.
+#       * Install ControlNet extension
+#       * Use with reference images for precise control
+#     - Inpainting: Fix specific areas without regenerating whole image
+#     - Img2Img: Refine existing images with lower denoising (0.2-0.4)
+
+# 12. API-SPECIFIC OPTIMIZATIONS (for diffusers_api_server.py)
+#     - Increase num_inference_steps: 30-50 for better quality
+#     - Use better scheduler:
+#       from diffusers import DPMSolverMultistepScheduler
+#       pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+#     - Enable VAE slicing for memory efficiency:
+#       pipe.enable_vae_slicing()
+#     - Enable attention slicing: pipe.enable_attention_slicing()
+#     - Use xformers for faster inference (if available):
+#       pipe.enable_xformers_memory_efficient_attention()
+#     - Consider using StableDiffusionXLPipeline for higher quality (if model supports)
+
+# 13. HARDWARE OPTIMIZATIONS
+#     - Use CUDA if available (much faster than CPU)
+#     - Enable xformers: Reduces VRAM usage, speeds up inference
+#     - Use torch.compile() (PyTorch 2.0+): Can speed up by 20-30%
+#     - Adjust attention slicing based on VRAM:
+#       * 8GB VRAM: enable_attention_slicing(1)
+#       * 12GB+ VRAM: enable_attention_slicing(2) or disable
+#     - Use CPU offloading if VRAM limited (slower but works)
+
+# 14. MODEL-SPECIFIC TIPS (Realistic Vision V6.0)
+#     - This model excels at: Photorealistic portraits, natural lighting
+#     - Best with: VAE enabled, Hires.Fix enabled
+#     - Optimal CFG: 6.5-7.5
+#     - Avoid: Over-stylized prompts, anime terms
+#     - Use: Natural lighting terms, photography terms
+
+# 15. WORKFLOW RECOMMENDATION
+#     Quick test workflow:
+#     1. Generate at 768x1024, 25 steps, CFG 7.0, DPM++ SDE Karras
+#     2. If good composition, enable Hires.Fix (1.5x, denoising 0.2)
+#     3. If face needs work, enable ADetailer
+#     4. Refine prompt/negative prompt based on results
+#     5. Generate batch of 4-8 with variations
+#     6. Pick best and do final upscale if needed
+#
+#     Production workflow:
+#     1. Generate base at 896x896, 50 steps, CFG 7.0, DPM++ 2M SDE Karras
+#     2. Hires.Fix: 2.0x, 4x-UltraSharp, denoising 0.25, 30 steps
+#     3. ADetailer: Face + Hands (if visible)
+#     4. External upscale to 4K if needed
+#     5. Final color correction/sharpening
+
+# 16. COMMON ISSUES & SOLUTIONS
+#     - Blurry results: Increase steps, use better sampler, enable Hires.Fix
+#     - Artifacts: Lower CFG, check VAE, reduce denoising strength
+#     - Wrong colors: Check VAE, adjust prompt, try different model
+#     - Deformed faces/hands: Use ADetailer, lower resolution, better negative prompt
+#     - Too stylized: Use more realistic model, adjust prompt, lower CFG
+#     - Out of memory: Enable attention slicing, reduce resolution, use CPU offloading
 
 # Files are already downloaded:
 # - Model: models/Stable-diffusion/Realistic_Vision_V6.0_NV_B1_fp16.safetensors
@@ -128,10 +823,57 @@ wget https://huggingface.co/SG161222/Realistic_Vision_V6.0_B1_noVAE/resolve/main
 #   Check current model: curl http://localhost:7860/sdapi/v1/options | grep sd_model_checkpoint
 #   Check current VAE: curl http://localhost:7860/sdapi/v1/options | grep sd_vae
 
-# Deliberate v3 - Download from CivitAI (requires getting direct link from website)
-# Option 1: Visit https://civitai.com/models/15236 and download manually, or
-# Option 2: Use CivitAI API (may require authentication):
-# wget "https://civitai.com/api/download/models/15236?type=Model&format=SafeTensor&size=full&fp=fp16" -O deliberate-v3.safetensors
+# ============================================================================
+# DELIBERATE MODEL CONFIGURATION
+# ============================================================================
+#
+# NOTE: "Deliberate for Invoke" (v0.8) is ONLY available as PickleTensor (deprecated)
+# Use Deliberate v2 or v3 instead - they have safetensors versions
+#
+# DELIBERATE V3 (RECOMMENDED - Has safetensors):
+# ===============================================
+# CivitAI Model ID: 15236
+# URL: https://civitai.com/models/15236/deliberate
+#
+# Download Options:
+#   Option 1: Visit https://civitai.com/models/15236 and download safetensors manually
+#   Option 2: Use CivitAI API (may require authentication):
+#     wget "https://civitai.com/api/download/models/15236?type=Model&format=SafeTensor&size=full&fp=fp16" \
+#       -O Deliberate_v3.safetensors
+#   Place in: models/Stable-diffusion/
+#
+# DELIBERATE V2 (Also has safetensors):
+# ======================================
+# Search CivitAI for "Deliberate v2" - should have safetensors format available
+#
+# RECOMMENDED SETTINGS FOR DELIBERATE:
+# ====================================
+#   Sampler: Euler a or DPM++ 2M Karras
+#   Steps: 20-30
+#   CFG Scale: 7.0-8.0
+#   Resolution: 512x512, 768x768, 512x768
+#   Versatile model - works well for people, landscapes, architecture, various styles
+#
+# PROMPT ENGINEERING:
+# ===================
+#   Quality tags: "masterpiece, best quality, highly detailed, 8k"
+#   Deliberate is very versatile - works with many styles
+#   Good for: portraits, landscapes, architecture, artistic images
+#
+# NEGATIVE PROMPT:
+# ================
+#   "lowres, bad anatomy, bad hands, text, error, missing fingers, 
+#    worst quality, low quality, normal quality, jpeg artifacts"
+#
+# API CONFIGURATION:
+# ==================
+#   After downloading, add to enhanced_api_wrapper.py:
+#     "deliberate": "Deliberate_v3.safetensors"
+#
+# VERIFICATION:
+# =============
+#   Check if downloaded: ls models/Stable-diffusion/ | grep -i deliberate
+#   Check in WebUI: Model dropdown should show Deliberate_v3.safetensors
 
 # ============================================================================
 # LOCAL APPS FOR DIFFUSERS FORMAT (with API mode)
