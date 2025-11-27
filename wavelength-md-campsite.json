@@ -1,0 +1,128 @@
+{
+  "3": {
+    "inputs": {
+      "seed": 113443143796481,
+      "steps": 9,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "16",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "13",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "6": {
+    "inputs": {
+      "text": "A tranquil yet adventurous campsite scene unfolds in a fertile valley, cradled by a distant, imposing mountain range under a vast, star-dusted night sky. The air is crisp, carrying the scent of pine and woodsmoke.\n\nAt the heart of the camp, a fierce-looking, red-headed young woman, her left eye covered by a stark black patch and her visible eye dramatically lined with heavy kohl, intently tends the crackling campfire. Her focused expression suggests a quiet strength and competence.\n\nNearby, a tall, sandy-haired teenage boy, his hair long enough to brush his neck and partially obscuring one eye, sits with a contemplative air, his plaid kilt a splash of color against the dimming light. He gazes into the flames, a subtle narrative of youth and wonder in his posture.\n\nFurther from the fire, a half-elf with human ears, short snow-white hair, and a distinguished white goatee looks up at the twinkling stars, a lute held gently in his hands. His lavender eyes glow with an inner light, reflecting the celestial expanse. He wears a long, elegant tunic with an upturned collar, adorned with a distinctive crow pin, embodying a blend of wisdom and artistic spirit.\n\nBeside him, a regal half-elf woman is gracefully perched on an elegant stool, her hands delicately tending to the evening meal. Her faintly glowing green eyes and short, refined ears hint at her heritage. She is adorned in a long, flowing elegant dress and a delicate tiara, her long golden braids cascading down her back like spun moonlight, radiating an aura of serene nobility.\n\nStanding partially illuminated by the warm glow of the campfire, a truly ferocious-looking Yeti cuts an unexpectedly tender figure. Adorned with a surprisingly efficient nurse's hat, it clutches a first aid kit in one massive, fur-covered hand, its expression a study in concerned care.\n\nAbove this diverse gathering, countless stars twinkle with brilliant intensity, and a single, luminous shooting star streaks across the vast expanse of the night sky, adding a touch of magic and destiny to the serene and slightly mysterious mountain camp.\n\nIn the style of a fantasy graphic novel",
+      "clip": [
+        "18",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Positive Prompt)"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "blurry ugly bad",
+      "clip": [
+        "18",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Negative Prompt)"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "17",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "9": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "13": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "16": {
+    "inputs": {
+      "unet_name": "z_image_turbo_bf16.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "17": {
+    "inputs": {
+      "vae_name": "ae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "18": {
+    "inputs": {
+      "clip_name": "qwen_3_4b.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  }
+}
