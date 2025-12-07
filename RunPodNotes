@@ -1,0 +1,20 @@
+ComfyUI Template: https://console.runpod.io/hub/template/comfyui?id=cw3nka7d08
+
+
+PodID: comfyui-zimage-foundation
+Storage ID: comfyui-zimage-models (50GB)
+
+# Check what's mounted
+df -h /workspace
+root@b3deba341ad1:/workspace/runpod-slim/ComfyUI# df -h /workspace
+Filesystem                   Size  Used Avail Use% Mounted on
+mfs#us-ca-2.runpod.net:9421  559T  415T  144T  75% /workspace
+root@b3deba341ad1:/workspace/runpod-slim/ComfyUI# 
+
+du -sh models/unet models/clip models/vae
+=== Current Files ===
+-rw-rw-rw- 1 root root 12G Dec  7 13:44 models/unet/z_image_turbo_bf16.safetensors
+-rw-rw-rw- 1 root root 7.5G Dec  7 13:41 models/clip/qwen_3_4b.safetensors
+-rw-rw-rw- 1 root root 320M Dec  7 13:41 models/vae/ae.safetensors
+
+
